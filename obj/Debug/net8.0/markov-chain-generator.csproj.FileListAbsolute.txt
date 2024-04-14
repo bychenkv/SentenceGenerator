@@ -1,0 +1,14 @@
+/Users/mac/Projects/dotnet/markov-chain-generator/bin/Debug/net8.0/markov-chain-generator
+/Users/mac/Projects/dotnet/markov-chain-generator/bin/Debug/net8.0/markov-chain-generator.deps.json
+/Users/mac/Projects/dotnet/markov-chain-generator/bin/Debug/net8.0/markov-chain-generator.runtimeconfig.json
+/Users/mac/Projects/dotnet/markov-chain-generator/bin/Debug/net8.0/markov-chain-generator.dll
+/Users/mac/Projects/dotnet/markov-chain-generator/bin/Debug/net8.0/markov-chain-generator.pdb
+/Users/mac/Projects/dotnet/markov-chain-generator/obj/Debug/net8.0/markov-chain-generator.GeneratedMSBuildEditorConfig.editorconfig
+/Users/mac/Projects/dotnet/markov-chain-generator/obj/Debug/net8.0/markov-chain-generator.AssemblyInfoInputs.cache
+/Users/mac/Projects/dotnet/markov-chain-generator/obj/Debug/net8.0/markov-chain-generator.AssemblyInfo.cs
+/Users/mac/Projects/dotnet/markov-chain-generator/obj/Debug/net8.0/markov-chain-generator.csproj.CoreCompileInputs.cache
+/Users/mac/Projects/dotnet/markov-chain-generator/obj/Debug/net8.0/markov-chain-generator.dll
+/Users/mac/Projects/dotnet/markov-chain-generator/obj/Debug/net8.0/refint/markov-chain-generator.dll
+/Users/mac/Projects/dotnet/markov-chain-generator/obj/Debug/net8.0/markov-chain-generator.pdb
+/Users/mac/Projects/dotnet/markov-chain-generator/obj/Debug/net8.0/markov-chain-generator.genruntimeconfig.cache
+/Users/mac/Projects/dotnet/markov-chain-generator/obj/Debug/net8.0/ref/markov-chain-generator.dll
