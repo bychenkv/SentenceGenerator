@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("markov-chain-generator")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+62ec979adf06dfb47facc22125f16879b81a981d")]
 [assembly: System.Reflection.AssemblyProductAttribute("markov-chain-generator")]
 [assembly: System.Reflection.AssemblyTitleAttribute("markov-chain-generator")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,63 +1,71 @@
-class Generator
-{
+class Generator {
+    const int SequenceLengthDefault = 200;
+    const int SampleSizeDefault = 2;
+
     public string SourceText { get; set; }
-
-    public int Count { get; set; }
-
+    public int SequenceLength { get; set; }
     public int SampleSize { get; set; }
 
-    private readonly List<string> _generatedTokens;
+    private List<string> _generatedTokens;
     private readonly Dictionary<string, List<string>> _transitionMatrix;
-    
     private readonly Random _random = new(); 
 
-    public Generator(string sourceText, int count, int sampleSize = 2)
+    public Generator(string sourceText,
+                     int sequenceLength = SequenceLengthDefault, 
+                     int sampleSize = SampleSizeDefault)
     {
         SourceText = sourceText;
-        Count = count;
+        SequenceLength = sequenceLength;
         SampleSize = sampleSize;
 
         var tokens = Tokenizer.Tokenize(sourceText);
         var samples = GetSamples(tokens);
 
         _transitionMatrix = GetTransitionMatrix(samples);
-        _generatedTokens = InitializeSequence(null);
+        _generatedTokens = InitializeSequence();
     }
 
-    public IEnumerable<string> Generate()
-    {
+    public IEnumerable<string> Generate() {
         while (true)
         {
-            var prediction = PredictNext();
+            var nextToken = MakeTransition();
 
-            if (_generatedTokens.Count <= Count)
-                yield return prediction;
+            if (nextToken != null)
+            {
+                if (_generatedTokens.Count <= SequenceLength)
+                    yield return nextToken;
+                else
+                    yield break;
+
+                _generatedTokens.Add(nextToken);
+            }
             else
-                yield break;
-
-            _generatedTokens.Add(prediction);
+            {
+                if (_generatedTokens.Count >= SampleSize)
+                    _generatedTokens.RemoveAt(_generatedTokens.Count - 1);
+                else
+                    _generatedTokens = InitializeSequence();
+            }
+                
         }
     }
 
-    private string PredictNext()
+    private string? MakeTransition()
     {
-        var lastPrediction = string.Join("", _generatedTokens.TakeLast(SampleSize));
-        if (!_transitionMatrix.TryGetValue(lastPrediction, out List<string>? value))
-            return "";
-        var targets = value;
+        var source = string.Join("", _generatedTokens.TakeLast(SampleSize - 1));
 
-        var index = _random.Next(targets.Count);
+        if (!_transitionMatrix.TryGetValue(source, out var targets))
+            return null;
 
-        return targets[index];
+        return targets[_random.Next(targets.Count)];
     }
 
-    private List<string> InitializeSequence(string? startText)
+    private List<string> InitializeSequence()
     {
         var keys = new List<string>(_transitionMatrix.Keys);
         var randomKey = keys[_random.Next(keys.Count)];
-        var initial = startText ?? randomKey;
 
-        return Tokenizer.Tokenize(initial);
+        return Tokenizer.Tokenize(randomKey);
     }
 
     private List<List<string>> GetSamples(List<string> tokens)
@@ -66,11 +74,7 @@ class Generator
 
         for (var i = 0; i < tokens.Count - SampleSize + 1; i++)
         {
-            var sample = new List<string>();
-
-            for (int j = 0; j < SampleSize; j++)
-                sample.Add(tokens[i + j]);
-
+            var sample = tokens.GetRange(i, SampleSize);
             samples.Add(sample);
         }
 
@@ -83,7 +87,7 @@ class Generator
 
         foreach (var sample in samples)
         {
-            var source = string.Join("", sample.GetRange(0, sample.Count - 1));
+            var source = string.Join("", sample[..^1]);
             var target = sample[^1];
 
             if (!transitionMatrix.ContainsKey(source))
