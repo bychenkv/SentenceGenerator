@@ -19,19 +19,13 @@ class Program
         return 0;
     }
 
-    // Summary
-    // ----------
-    // Method that configures an application
-    // ----------
-    // Parameters
-    // ----------
-    // Input:
-    //  string[] `args` - array with raw values of command line arguments
-    // ----------
-    // Return
-    // ----------
-    // IConfigurationRoot object which keeps info about command-line argument values
-    // ----------
+    // Summary:
+    //     Configures an application: processes command-line arguments.
+    // Parameters:
+    //   args:
+    //     An array with raw values of command line arguments.
+    // Returns:
+    //     A config with raw command-line argument values.
     private static IConfigurationRoot Configure(string[] args)
     {
         var builder = new ConfigurationBuilder();
@@ -47,24 +41,20 @@ class Program
         return builder.Build();
     }
 
-    // Summary
-    // ----------
-    // Method that tries to parse command-line args
-    // Also prints an error message in console
-    // ----------
-    // Parameters
-    // ----------
-    // Input:
-    //  IConfigurationRoot `config` - keeps raw command-line argument values
-    // Output:
-    //  int `sentenceLength`    - length of the sentence to be generated
-    //  int `sampleSize`        - how many previous tokens to take into account to predict next token
-    //  string `sourceText`     - text on the basis of which tokens are generated
-    // ----------
-    // Return
-    // ----------
-    // `true` if parsing was successful and `false` otherwise
-    // ----------
+    // Summary:
+    //     Tries to parse command-line arguments.
+    //     Also prints an error message in console.
+    // Parameters:
+    //   config:
+    //     Keeps raw command-line argument values.
+    //   (out) sentenceLength:
+    //     A length of the sentence to be generated.
+    //   (out) sampleSize:
+    //     A number of previous tokens to take into account to predict next token.
+    //   (out) sourceText:
+    //     A text on the basis of which tokens are generated.
+    // Returns:
+    //     true if parsing was successful; false otherwise.
     private static bool TryParseArgs(IConfigurationRoot config,
         out int sentenceLength, out int sampleSize, out string sourceText)
     {
