@@ -1,7 +1,10 @@
 using System.Text.RegularExpressions;
 
+// Summary:
+//     A class for processing the source text: splitting into tokens, and vice versa.
 static partial class Tokenizer
 {
+    // Regex patterns
     const string NewlinePlaceholder     = "§";
     const string NewlineOriginal        = "\n\n";
     const string NewlinePattern         = @"\r\n?|\n";
@@ -9,6 +12,7 @@ static partial class Tokenizer
     const string WordsPattern           = @"[a-zA-Zа-яА-ЯёЁ]+";
     const string CompoundWordsPattern   = $@"{WordsPattern}-{WordsPattern}";
 
+    // Punctuation characters
     private static readonly string[] Punctuation =
         [
             "[", "]", "(", ")", "{", "}", "!", "?",
@@ -23,7 +27,16 @@ static partial class Tokenizer
     [GeneratedRegex(NewlinePlaceholder)]
     private static partial Regex NewlineRegexBack();
 
-    // Method that splits an input text into a list of tokens
+    // Summary:
+    //     Splits an input text into a list of tokens
+    //
+    // Parameters:
+    //   text:
+    //     An input text
+    //
+    // Returns:
+    //     A list of tokens into which the text is split
+
     public static List<Token> Tokenize(string? text)
     {
         if (text == null)
@@ -40,7 +53,15 @@ static partial class Tokenizer
         return tokens.Where(token => token.Length > 0).ToList();
     }
 
-    // Method that that combines a list of tokens into a string 
+    // Summary:
+    //     Combines a sequence of tokens into a string.
+    //
+    // Parameters:
+    //   tokens:
+    //     A sequence of tokens.
+    //
+    // Returns:
+    //     A string combining a set of tokens
     public static string Join(IEnumerable<Token> tokens)
     {
         var text = string.Join("", tokens.Select(token => token.Content));

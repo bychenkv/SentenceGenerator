@@ -1,3 +1,6 @@
+// Summary:
+//     Performs the generation of a sequence of tokens,
+//     as well as the construction of a transition matrix.
 class Generator
 {
     const int SequenceLengthDefault = 200;
@@ -7,8 +10,16 @@ class Generator
     private readonly Dictionary<Token, List<Token>> _transitionMatrix;
     private readonly Random _random = new(); 
 
+    // Summary:
+    //     A text on the basis of which tokens are generated.
     public string SourceText { get; set; }
+
+    // Summary:
+    //     A number of tokens to be generated.
     public int SequenceLength { get; set; }
+
+    // Summary:
+    //     A number of previous tokens to take into account to predict next token.
     public int SampleSize { get; set; }
 
     public Generator(
@@ -25,6 +36,10 @@ class Generator
         _generatedTokens = InitializeSequence();
     }
 
+    // Summary:
+    //     Generates a sequence of tokens of the required length.
+    // Returns:
+    //     An enumerator containing the generated sequence.
     public IEnumerable<Token> Generate()
     {
         while (true)
@@ -40,16 +55,17 @@ class Generator
 
                 _generatedTokens.Add(nextToken);
             }
+            else if (_generatedTokens.Count >= SampleSize)
+                _generatedTokens.RemoveAt(_generatedTokens.Count - 1);
             else
-            {
-                if (_generatedTokens.Count >= SampleSize)
-                    _generatedTokens.RemoveAt(_generatedTokens.Count - 1);
-                else
-                    _generatedTokens = InitializeSequence();
-            }   
+                _generatedTokens = InitializeSequence();
         }
     }
 
+    // Summary:
+    //     Predicts the next token based on the previous ones.
+    // Returns:
+    //     The next token to generate.
     private Token? MakeTransition()
     {
         var contents = _generatedTokens.TakeLast(SampleSize - 1).Select(token => token.Content);
@@ -63,6 +79,10 @@ class Generator
         return targets[_random.Next(targets.Count)];
     }
 
+    // Summary:
+    //     Initializes the sequence with random tokens.
+    // Returns:
+    //     A list of `sampleSize - 1` tokens.
     private List<Token> InitializeSequence()
     {
         var keys = new List<Token>(_transitionMatrix.Keys);
@@ -71,6 +91,13 @@ class Generator
         return Tokenizer.Tokenize(randomKey?.Content);
     }
 
+    // Summary:
+    //     Splits a list of tokens into samples through a sliding window of the required size.
+    // Parameters:
+    //   tokens:
+    //     A list of tokens.
+    // Returns:
+    //     A list of samples.
     private List<List<Token>> GetSamples(List<Token> tokens)
     {
         var samples = new List<List<Token>>();
@@ -84,6 +111,13 @@ class Generator
         return samples;
     }
 
+    // Summary:
+    //     Constructs a transition matrix to predict the next token.
+    // Parameters:
+    //   samples:
+    //     A list of samples.
+    // Returns:
+    //     A transition matrix.
     private static Dictionary<Token, List<Token>> GetTransitionMatrix(List<List<Token>> samples)
     {
         var transitionMatrix = new Dictionary<Token, List<Token>>();
