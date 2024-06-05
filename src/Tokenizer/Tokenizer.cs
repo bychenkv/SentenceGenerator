@@ -34,7 +34,6 @@ static partial class Tokenizer {
     //
     // Returns:
     //     A list of tokens into which the text is split
-
     public static List<Token> Tokenize(string? text) {
         if (text == null)
             return [];

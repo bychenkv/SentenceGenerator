@@ -31,9 +31,9 @@ class Generator {
         SampleSize = sampleSize;
 
         var tokens = Tokenizer.Tokenize(sourceText);
-        var samples = GetSamples(tokens);
+        var samples = GeneratorUtils.GetSamples(tokens, sampleSize);
 
-        _transitionMatrix = BuildTransitionMatrix(samples);
+        _transitionMatrix = GeneratorUtils.BuildTransitionMatrix(samples);
         _generatedTokens = InitializeSequence();
     }
 
@@ -44,7 +44,7 @@ class Generator {
     //     An enumerator containing the generated sequence.
     public IEnumerable<Token> Generate() {
         while (true) {
-            var nextToken = MakeTransition();
+            var nextToken = GenerateNextToken();
 
             if (nextToken is not null) {
                 if (_generatedTokens.Count <= SequenceLength)
@@ -65,7 +65,7 @@ class Generator {
     //
     // Returns:
     //     The next token to generate.
-    private Token? MakeTransition() {
+    private Token? GenerateNextToken() {
         var source = new Token(_generatedTokens.TakeLast(SampleSize - 1));
 
         if (!_transitionMatrix.ContainsKey(source))
@@ -86,50 +86,5 @@ class Generator {
         var randomKey = keys.Count > 0 ? keys[_random.Next(keys.Count)] : null;
 
         return Tokenizer.Tokenize(randomKey?.Content);
-    }
-
-    // Summary:
-    //     Splits a list of tokens into samples through a sliding window of the required size.
-    //
-    // Parameters:
-    //   tokens:
-    //     A list of tokens.
-    //
-    // Returns:
-    //     A list of samples.
-    private List<List<Token>> GetSamples(List<Token> tokens) {
-        var samples = new List<List<Token>>();
-        
-        for (var i = 0; i < tokens.Count - SampleSize + 1; i++) {
-            var sample = tokens.GetRange(i, SampleSize);
-            samples.Add(sample);
-        }
-
-        return samples;
-    }
-
-    // Summary:
-    //     Constructs a transition matrix to predict the next token.
-    //
-    // Parameters:
-    //   samples:
-    //     A list of samples.
-    //
-    // Returns:
-    //     A transition matrix.
-    private static Dictionary<Token, List<Token>> BuildTransitionMatrix(List<List<Token>> samples) {
-        var transitionMatrix = new Dictionary<Token, List<Token>>();
-
-        foreach (var sample in samples) {
-            var source = new Token(sample.SkipLast(1));
-            var target = sample[^1];
-
-            if (!transitionMatrix.ContainsKey(source))
-                transitionMatrix[source] = [];
-            
-            transitionMatrix[source].Add(target);
-        }
-
-        return transitionMatrix;
     }
 }
