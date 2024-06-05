@@ -85,7 +85,7 @@ class Program {
 
         var sourceFile = config["sourceFile"]!;
         var currentDirectory = Directory.GetCurrentDirectory();
-        var pathToSourceFile = Path.Combine(currentDirectory, sourceFile);
+        var pathToSourceFile = Path.Combine(currentDirectory, "samples", sourceFile);
         try {
             sourceText = File.ReadAllText(pathToSourceFile);
         } catch (Exception e) {
