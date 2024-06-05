@@ -2,8 +2,7 @@ using System.Text.RegularExpressions;
 
 // Summary:
 //     A class for processing the source text: splitting into tokens, and vice versa.
-static partial class Tokenizer
-{
+static partial class Tokenizer {
     // Regex patterns
     const string NewlinePlaceholder     = "§";
     const string NewlineOriginal        = "\n\n";
@@ -13,13 +12,12 @@ static partial class Tokenizer
     const string CompoundWordsPattern   = $@"{WordsPattern}-{WordsPattern}";
 
     // Punctuation characters
-    private static readonly string[] Punctuation =
-        [
-            "[", "]", "(", ")", "{", "}", "!", "?",
-            ".", ",", ":", ";", "'", "\"", "\\", "/",
-            "*", "&", "^", "%", "$", "_", "+", "-",
-            "–", "—", "=", "<", ">", "@", "|", "~", "§"
-        ];
+    private static readonly string[] Punctuation = [
+        "[", "]", "(", ")", "{", "}", "!", "?",
+        ".", ",", ":", ";", "'", "\"", "\\", "/",
+        "*", "&", "^", "%", "$", "_", "+", "-",
+        "–", "—", "=", "<", ">", "@", "|", "~", "§"
+    ];
 
     [GeneratedRegex(NewlinePattern)]
     private static partial Regex NewlineRegex();
@@ -37,8 +35,7 @@ static partial class Tokenizer
     // Returns:
     //     A list of tokens into which the text is split
 
-    public static List<Token> Tokenize(string? text)
-    {
+    public static List<Token> Tokenize(string? text) {
         if (text == null)
             return [];
 
@@ -46,7 +43,8 @@ static partial class Tokenizer
 
         var punctuationPattern = string.Join("\\\\", Punctuation);
         var tokenizeRegex = new Regex(
-            $"({ElipsisPattern}|{CompoundWordsPattern}|{WordsPattern}|[{punctuationPattern}])");
+            $"({ElipsisPattern}|{CompoundWordsPattern}|{WordsPattern}|[{punctuationPattern}])"
+        );
 
         var tokens = tokenizeRegex.Split(newlineReplacedText).Select(token => new Token(token));
 
@@ -62,8 +60,7 @@ static partial class Tokenizer
     //
     // Returns:
     //     A string combining a set of tokens
-    public static string Join(IEnumerable<Token> tokens)
-    {
+    public static string Join(IEnumerable<Token> tokens) {
         var text = string.Join("", tokens.Select(token => token.Content));
 
         return NewlineRegexBack().Replace(text, NewlineOriginal);
